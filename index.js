@@ -16,10 +16,16 @@ client.on('ready', async () => {
     try { 
         let cmdArray = Array.from(commands, ([name, cmd]) => ({ 
             name, 
-            description: cmd.desc 
+            description: cmd.desc,
+            options: cmd.options || []
         }));
-        await rest.put(Routes.applicationCommands(client.user.id), { body: cmdArray }); 
-    } catch (e) {}
+        await rest.put(Routes.applicationCommands(client.user.id), { body: cmdArray });
+        if (process.env.guildID) {
+            await rest.put(Routes.applicationGuildCommands(client.user.id, process.env.guildID), { body: cmdArray });
+        }
+    } catch (e) {
+        console.log(e)
+    }
 });
 
 client.on('interactionCreate', async interaction => {

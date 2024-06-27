@@ -17,4 +17,4 @@ const collections = {
     games: db.collection("games")
 };
 
-module.exports = collections;
+export default collections;
