@@ -10,6 +10,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "chart.js": "^3.5.1",
+    "chartjs-node-canvas": "^4.1.6",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "javascript-time-ago": "^2.5.10",

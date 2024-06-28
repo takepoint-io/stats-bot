@@ -1,5 +1,6 @@
 const { players } = (await import('../database.js')).default;
-import { EmbedBuilder } from 'discord.js';
+const { ChartJSNodeCanvas } = await import('chartjs-node-canvas');
+import { EmbedBuilder, AttachmentBuilder } from 'discord.js';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 TimeAgo.addDefaultLocale(en);
@@ -25,6 +26,11 @@ export default {
             return;
         }
         let player = await players.findOne({ usernameLower: username.toLowerCase() });
+        let { pistol, assault, sniper, shotgun } = player.weapons;
+        let statsColors = ["#fcf484", "#ed5555", "#88ff80", "#5597ff"];
+        let weapons = [pistol, assault, sniper, shotgun].map((e, i) => [e, i]);
+        let bestWeapon = weapons.sort((a, b) => b[0].kills - a[0].kills)[0];
+        let primaryColor = statsColors[bestWeapon[1]];
         let rows = [
             `Total Score: **${player.score.toLocaleString()}**`,
             `Time Played: **${toTwoDecimals(msToHours(player.timePlayed))} hours**`,
@@ -41,16 +47,51 @@ export default {
             `Multi Kills: **${player.multiKills.toLocaleString()}**`,
             `Started Playing: **${timeAgo.format(player.createdAt)}**`,
             `Last Active: **${timeAgo.format(player.lastActive)}**`,
-            "",
+            `--`,
             `**[View these stats online](${"https://stats.nitrogem35.pw/user/" + player.usernameLower})**`
         ]
+        let chart = new ChartJSNodeCanvas({ width: 2000, height: 1000 });
+        let config = {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    `Pistol (${pistol.kills})`,
+                    `Assault (${assault.kills})`,
+                    `Sniper (${sniper.kills})`,
+                    `Shotgun (${shotgun.kills})`
+                ],
+                datasets: [{
+                    label: "Kills with weapon",
+                    data: [pistol.kills, assault.kills, sniper.kills, shotgun.kills],
+                    backgroundColor: statsColors
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "white",
+                            font: {
+                                size: 65,
+                            },
+                            padding: 40,
+                            boxWidth: 90
+                        }
+                    }
+                },
+            }
+        }
+        let rendered = await chart.renderToBuffer(config);
+        let attachment = new AttachmentBuilder(rendered);
+        attachment.name = "chart.png";
         let embed = new EmbedBuilder()
-            .setColor("Yellow")
+            .setColor(primaryColor)
             .setTitle(player.username + " Player Summary")
+            .setImage('attachment://chart.png')
             .setDescription(rows.join("\n"))
             .setTimestamp()
             .setFooter({ text: "Requested by " + interaction.user.username, iconURL: interaction.user.avatarURL() });
-        await interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed], files: [attachment] });
     }
 }
 
