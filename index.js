@@ -32,7 +32,9 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
     if (commands.has(interaction.commandName)) {
-        await commands.get(interaction.commandName).exec(interaction);
+        try {
+            await commands.get(interaction.commandName).exec(interaction);
+        } catch (e) {}
     }
 });
 

@@ -48,6 +48,13 @@ export default {
             `Started Playing: **${timeAgo.format(player.createdAt)}**`,
             `Last Active: **${timeAgo.format(player.lastActive)}**`,
             `--`,
+            `**Favorite Upgrades:**`,
+            `Increase Speed: **${player.upgrades.speed.toLocaleString()}**`,
+            `Faster Reload: **${player.upgrades.reload.toLocaleString()}**`,
+            `Larger Mags: **${player.upgrades.mags.toLocaleString()}**`,
+            `Extend View: **${player.upgrades.view.toLocaleString()}**`,
+            `Heal Faster: **${player.upgrades.heal.toLocaleString()}**`,
+            `--`,
             `**[View these stats online](${"https://stats.nitrogem35.pw/user/" + player.usernameLower})**`
         ]
         let chart = new ChartJSNodeCanvas({ width: 2000, height: 1000 });
