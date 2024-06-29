@@ -26,6 +26,10 @@ export default {
             return;
         }
         let player = await players.findOne({ usernameLower: username.toLowerCase() });
+        if (!player) {
+            await interaction.reply({ content: "That player doesn't exist.", ephemeral: true });
+            return;
+        }
         let { pistol, assault, sniper, shotgun } = player.weapons;
         let statsColors = ["#fcf484", "#ed5555", "#88ff80", "#5597ff"];
         let weapons = [pistol, assault, sniper, shotgun].map((e, i) => [e, i]);
