@@ -31,7 +31,7 @@ export default {
             return;
         }
         let { pistol, assault, sniper, shotgun } = player.weapons;
-        let statsColors = ["#fcf484", "#ed5555", "#88ff80", "#5597ff"];
+        let statsColors = ["rgb(252, 244, 132)", "rgb(244, 132, 102)", "rgb(148, 236, 140)", "rgb(140, 220, 252)"];
         let weapons = [pistol, assault, sniper, shotgun].map((e, i) => [e, i]);
         let bestWeapon = weapons.sort((a, b) => b[0].kills - a[0].kills)[0];
         let primaryColor = statsColors[bestWeapon[1]];
@@ -96,7 +96,7 @@ export default {
         let attachment = new AttachmentBuilder(rendered);
         attachment.name = "chart.png";
         let embed = new EmbedBuilder()
-            .setColor(primaryColor)
+            .setColor(3066993)
             .setTitle(player.username + " Player Summary")
             .setImage('attachment://chart.png')
             .setDescription(rows.join("\n"))
