@@ -59,7 +59,7 @@ export default {
             `Extend View: **${player.upgrades.view.toLocaleString()}**`,
             `Heal Faster: **${player.upgrades.heal.toLocaleString()}**`,
             `--`,
-            `**[View these stats online](${"https://stats.nitrogem35.pw/user/" + player.usernameLower})**`
+            `**[View these stats online](${"https://stats.takepoints.io/user/" + player.usernameLower})**`
         ]
         let chart = new ChartJSNodeCanvas({ width: 2000, height: 1000 });
         let config = {
